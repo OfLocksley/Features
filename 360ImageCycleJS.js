@@ -31,7 +31,7 @@
         let startX;
         let currentImgIndex = 0;
         let loadedCount = 0;
-        const loadingEl = document.getElementById('360-loading-message');
+        const loadingEl = document.getElementById('spin-images-loading-message');
         const default360PlaceholderImage = "images/3D/360s/placeholder-image-360.png";
 
         const baseName = "images/3D/360s/it-pennywise-mirrors-statue/Pennywise-statue-360-";
@@ -42,7 +42,7 @@
         const extension = ".png";
         const totalImages = 120;
 
-        // Loop to generate 5 images (image_1.jpg to image_5.jpg)
+        
         for (let i = 1; i <= totalImages; i++) {
             allRanges.forEach((resGroup, index) => {
                 resGroup.push(`${baseName}${resTurnNames[index]}${i.toString().padStart(4, '0')}${extension}`);
@@ -56,18 +56,17 @@
         const setResolutionUHDBtn = document.getElementById("setResolutionUHDBtn");
 
         setResolutionSDBtn.addEventListener('click', () => {
-            viewer.classList = viewer.classList == "pageContentHide" ? "pageContentReveal" : "pageContentHide";
+            viewer.classList = "pageContentHide";
+            loadingEl.style.display = "block";
             
-            preloadImages(thirdResImages)
-            .then(images => console.log("All images loaded!", images))
-            .catch(err => console.error(err));
             images = thirdResImages;
             setResolution = "SD";
             updateViewerSource();
         });
 
         setResolutionHDBtn.addEventListener('click', () => {
-            viewer.classList = viewer.classList === "pageContentHide" ? "pageContentHide" : "pageContentReveal";
+            viewer.classList = "pageContentHide";
+            loadingEl.style.display = "block";
             preloadImages(halfResImages)
             .then(images => console.log("All images loaded!", images))
             .catch(err => console.error(err));
@@ -77,7 +76,8 @@
         });
 
         setResolutionUHDBtn.addEventListener('click', () => {
-            viewer.classList = viewer.classList === "pageContentHide" ? "pageContentHide" : "pageContentReveal";
+            viewer.classList = "pageContentHide";
+            loadingEl.style.display = "block";
             preloadImages(fullResImages)
             .then(images => console.log("All images loaded!", images))
             .catch(err => console.error(err));
@@ -87,11 +87,10 @@
         });
 
         async function preloadImages(urls) {
-                const promises = urls.map(url => {
-                    
-                    loadedCount++;
+            
 
-                    // Update the message every time one image finishes
+                const promises = urls.map(url => {
+                    loadedCount++;
                     const percentage = Math.round((loadedCount / urls.length) * 100);
                     loadingEl.innerText = `Loading... ${percentage}%`;
                     return new Promise((resolve, reject) => {
@@ -100,17 +99,17 @@
                     img.onload = () => resolve(img);
                     img.onerror = () => reject(`Failed to load ${url}`);
 
+    
                     });
-
                 });
-
                 // Wait for all images to load
                 return await Promise.all(promises);
-                document.getElementById('loading-message').style.display = 'none';
+                
             }
 
            function updateViewerSource(){
-
+                    loadedCount = 0;
+                    document.getElementById('spin-images-loading-message').style.display = 'none';
                     viewer.src = setResolution === "SD" ? thirdResImages[currentImgIndex] : setResolution === "HD" ? halfResImages[currentImgIndex] : setResolution === "UHD" ? fullResImages[currentImgIndex] : default360PlaceholderImage;
                     viewer.classList.remove("pageContentHide");
                     viewer.classList.add("pageContentReveal");
