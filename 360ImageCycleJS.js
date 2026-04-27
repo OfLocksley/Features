@@ -57,8 +57,10 @@
 
         setResolutionSDBtn.addEventListener('click', () => {
             viewer.classList = "pageContentHide";
-            loadingEl.style.display = "block";
-            
+            //loadingEl.style.display = "block";
+            preloadImages(thirdResTurnsName)
+            .then(images => console.log("All images loaded!", images))
+            .catch(err => console.error(err));
             images = thirdResImages;
             setResolution = "SD";
             updateViewerSource();
@@ -66,7 +68,7 @@
 
         setResolutionHDBtn.addEventListener('click', () => {
             viewer.classList = "pageContentHide";
-            loadingEl.style.display = "block";
+            //loadingEl.style.display = "block";
             preloadImages(halfResImages)
             .then(images => console.log("All images loaded!", images))
             .catch(err => console.error(err));
@@ -77,7 +79,7 @@
 
         setResolutionUHDBtn.addEventListener('click', () => {
             viewer.classList = "pageContentHide";
-            loadingEl.style.display = "block";
+            //loadingEl.style.display = "block";
             preloadImages(fullResImages)
             .then(images => console.log("All images loaded!", images))
             .catch(err => console.error(err));
@@ -90,9 +92,9 @@
             
 
                 const promises = urls.map(url => {
-                    loadedCount++;
+                  /* loadedCount++;
                     const percentage = Math.round((loadedCount / urls.length) * 100);
-                    loadingEl.innerText = `Loading... ${percentage}%`;
+                    loadingEl.innerText = `Loading... ${percentage}%`;*/
                     return new Promise((resolve, reject) => {
                     const img = new Image();
                     img.src = url;
@@ -108,8 +110,8 @@
             }
 
            function updateViewerSource(){
-                    loadedCount = 0;
-                    document.getElementById('spin-images-loading-message').style.display = 'none';
+                    //loadedCount = 0;
+                   // document.getElementById('spin-images-loading-message').style.display = 'none';
                     viewer.src = setResolution === "SD" ? thirdResImages[currentImgIndex] : setResolution === "HD" ? halfResImages[currentImgIndex] : setResolution === "UHD" ? fullResImages[currentImgIndex] : default360PlaceholderImage;
                     viewer.classList.remove("pageContentHide");
                     viewer.classList.add("pageContentReveal");
